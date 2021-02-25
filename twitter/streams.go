@@ -40,6 +40,7 @@ func newStreamService(client *http.Client, sling *sling.Sling) *StreamService {
 // StreamFilterParams are parameters for StreamService.Filter.
 type StreamFilterParams struct {
 	FilterLevel   string   `url:"filter_level,omitempty"`
+	TweetMode     string   `url:"tweet_mode,omitempty"`
 	Follow        []string `url:"follow,omitempty,comma"`
 	Language      []string `url:"language,omitempty,comma"`
 	Locations     []string `url:"locations,omitempty,comma"`
@@ -50,6 +51,7 @@ type StreamFilterParams struct {
 // Filter returns messages that match one or more filter predicates.
 // https://dev.twitter.com/streaming/reference/post/statuses/filter
 func (srv *StreamService) Filter(params *StreamFilterParams) (*Stream, error) {
+	params.TweetMode = "extended"
 	req, err := srv.public.New().Post("filter.json").QueryStruct(params).Request()
 	if err != nil {
 		return nil, err
@@ -60,12 +62,14 @@ func (srv *StreamService) Filter(params *StreamFilterParams) (*Stream, error) {
 // StreamSampleParams are the parameters for StreamService.Sample.
 type StreamSampleParams struct {
 	StallWarnings *bool    `url:"stall_warnings,omitempty"`
+	TweetMode     string   `url:"tweet_mode,omitempty"`
 	Language      []string `url:"language,omitempty,comma"`
 }
 
 // Sample returns a small sample of public stream messages.
 // https://dev.twitter.com/streaming/reference/get/statuses/sample
 func (srv *StreamService) Sample(params *StreamSampleParams) (*Stream, error) {
+	params.TweetMode = "extended"
 	req, err := srv.public.New().Get("sample.json").QueryStruct(params).Request()
 	if err != nil {
 		return nil, err
@@ -82,11 +86,13 @@ type StreamUserParams struct {
 	StallWarnings *bool    `url:"stall_warnings,omitempty"`
 	Track         []string `url:"track,omitempty,comma"`
 	With          string   `url:"with,omitempty"`
+	TweetMode     string   `url:"tweet_mode,omitempty"`
 }
 
 // User returns a stream of messages specific to the authenticated User.
 // https://dev.twitter.com/streaming/reference/get/user
 func (srv *StreamService) User(params *StreamUserParams) (*Stream, error) {
+	params.TweetMode = "extended"
 	req, err := srv.user.New().Get("user.json").QueryStruct(params).Request()
 	if err != nil {
 		return nil, err
@@ -102,12 +108,14 @@ type StreamSiteParams struct {
 	Replies       string   `url:"replies,omitempty"`
 	StallWarnings *bool    `url:"stall_warnings,omitempty"`
 	With          string   `url:"with,omitempty"`
+	TweetMode     string   `url:"tweet_mode,omitempty"`
 }
 
 // Site returns messages for a set of users.
 // Requires special permission to access.
 // https://dev.twitter.com/streaming/reference/get/site
 func (srv *StreamService) Site(params *StreamSiteParams) (*Stream, error) {
+	params.TweetMode = "extended"
 	req, err := srv.site.New().Get("site.json").QueryStruct(params).Request()
 	if err != nil {
 		return nil, err
@@ -121,12 +129,14 @@ type StreamFirehoseParams struct {
 	FilterLevel   string   `url:"filter_level,omitempty"`
 	Language      []string `url:"language,omitempty,comma"`
 	StallWarnings *bool    `url:"stall_warnings,omitempty"`
+	TweetMode     string   `url:"tweet_mode,omitempty"`
 }
 
 // Firehose returns all public messages and statuses.
 // Requires special permission to access.
 // https://dev.twitter.com/streaming/reference/get/statuses/firehose
 func (srv *StreamService) Firehose(params *StreamFirehoseParams) (*Stream, error) {
+	params.TweetMode = "extended"
 	req, err := srv.public.New().Get("firehose.json").QueryStruct(params).Request()
 	if err != nil {
 		return nil, err
