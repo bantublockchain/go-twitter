@@ -1,4 +1,4 @@
-module github.com/bantublockchain/go-twitter/twitter
+module github.com/bantublockchain/go-twitter
 
 go 1.16
 
